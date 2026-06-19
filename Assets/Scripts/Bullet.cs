@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float speed = 10f;
+    private int atk = 1;
     private Rigidbody2D rb;
 
     void Start()
@@ -18,11 +19,16 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //敵と当たったら敵も自分も消す
         if (collision.CompareTag("Enemy"))
         {
+            Enemy enemy = collision.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                enemy.TakeDamage(atk);
+            }
+
             Destroy(gameObject);
-            Destroy(collision.gameObject);
         }
     }
 }

@@ -6,6 +6,8 @@ public class EnemySpawner : MonoBehaviour
     private float spawnInterval = 1.5f;
     private float timer;
 
+    private int spawnCount = 0;
+
     private void Update()
     {
         timer += Time.deltaTime;
@@ -19,9 +21,17 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
+        spawnCount++;
+
         float randomY = Random.Range(-4f, 4f);
         Vector3 spawnPosition = new Vector3(10f, randomY, 0f);
 
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);        //Quaternion.identity→そのままの向き、回転ゼロ
+        GameObject spawnedEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        Enemy enemyScript = spawnedEnemy.GetComponent<Enemy>();
+        if (enemyScript != null)
+        {
+            enemyScript.SetHp(spawnCount);
+        }
+
     }
 }

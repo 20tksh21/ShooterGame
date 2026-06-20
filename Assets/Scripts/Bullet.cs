@@ -3,8 +3,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float speed = 10f;
-    private int atk = 1;
     private Rigidbody2D rb;
+
+
+    private int Atk { get; set; } = 2;
 
     void Start()
     {
@@ -14,18 +16,23 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
+        //右の壁に当たった時の処理
         if(collision.CompareTag("RightWall"))
         {
             Destroy(gameObject);
         }
 
+
+        //敵に当たった時の処理
         if (collision.CompareTag("Enemy"))
         {
             Enemy enemy = collision.GetComponent<Enemy>();
 
             if (enemy != null)
             {
-                enemy.TakeDamage(atk);
+                enemy.TakeDamage(Atk);
+                GameManager.Instance.AddScore(Atk);
             }
 
             Destroy(gameObject);

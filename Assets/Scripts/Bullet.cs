@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody2D rb;
 
 
-    private int Atk { get; set; } = 2;
+    public int Atk { get; set; } = 1;
 
     void Start()
     {

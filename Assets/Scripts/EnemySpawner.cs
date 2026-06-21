@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Enemy enemyPrefab;
     private float spawnInterval = 1.5f;
     private float timer;
 
@@ -26,11 +26,10 @@ public class EnemySpawner : MonoBehaviour
         float randomY = Random.Range(-4f, 4f);
         Vector3 spawnPosition = new Vector3(10f, randomY, 0f);
 
-        GameObject spawnedEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        Enemy enemyScript = spawnedEnemy.GetComponent<Enemy>();
-        if (enemyScript != null)
+        Enemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        if (enemy != null)
         {
-            enemyScript.SetHp(spawnCount);
+            enemy.SetHp(spawnCount);
         }
 
     }

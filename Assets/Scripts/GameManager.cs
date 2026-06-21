@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
         get { return totalScore; }
         private set { totalScore = value; }
     }
+
     private const int MAXLEVEL = 10;
     private int levelUpScore = 5;
     private int currentScore = 0;    // 現在のレベル内で溜まったスコア（requiredScoreの計算用）
@@ -16,6 +18,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI TotalScoreText;
     [SerializeField] private TextMeshProUGUI LevelText;
+
+    [SerializeField] private GameObject upgradePanel;
+    [SerializeField] private Button upgradeButton;
+    [SerializeField] private TextMeshProUGUI upgradeNameText;
+    [SerializeField] private Image upgradeImage;
+    [SerializeField] private TextMeshProUGUI upgradeEffectText;
+
+    [SerializeField] private Shooter shooter;
+    [SerializeField] private UpgradeData attackUpData;
 
 
     public static GameManager Instance { get; private set; }        //シングルトン（このインスタンス以外作らない）
@@ -35,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        upgradePanel.SetActive(false); 
         UpdateUI();
     }
 
@@ -60,6 +72,8 @@ public class GameManager : MonoBehaviour
         {
             currentLevel += 1;
             levelUpScore *= 2;
+
+            ShowUpgradePanel();
         }
     }
 
@@ -76,5 +90,26 @@ public class GameManager : MonoBehaviour
             int requiredScore = levelUpScore - currentScore;
             LevelText.text = $"現在のレベル：{currentLevel}  次のレベルまで：{requiredScore}";
         }
+    }
+
+    private void ShowUpgradePanel()
+    {
+        Time.timeScale = 0f;
+        upgradePanel.SetActive(true);
+
+        upgradeNameText.text = attackUpData.upgradeName;
+        upgradeImage.sprite = attackUpData.upgradeImage;
+        upgradeEffectText.text = attackUpData.upgradeEffect;
+
+        upgradeButton.onClick.RemoveAllListeners();
+        upgradeButton.onClick.AddListener(() => Upgrade(attackUpData));
+    }
+
+    private void Upgrade(UpgradeData data)
+    {
+        shooter.ApplyUpgrade(data);
+
+        upgradePanel.SetActive(false);
+        Time.timeScale = 1.0f;
     }
 }
